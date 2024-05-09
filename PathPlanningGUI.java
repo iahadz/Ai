@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Random;
 
 public class PathPlanningGUI extends JFrame {
     private static final int GRID_SIZE = 10; // Size of the grid
@@ -27,6 +28,14 @@ public class PathPlanningGUI extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Reset obstacles
+                grid.resetObstacles();
+                // Generate new obstacles
+                grid.generateRandomObstacles(15);
+                // Randomize start and goal nodes
+                Random random = new Random();
+                startNode = new Node(random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE), null);
+                goalNode = new Node(random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE), null);
                 path = AStar.aStar(grid, startNode, goalNode);
                 repaint();
             }
@@ -50,7 +59,7 @@ public class PathPlanningGUI extends JFrame {
 
                 if (grid.isObstacle(i, j)) {
                     g.setColor(Color.BLACK);
-                    g.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+                    g.fillRect(x, y, CELL_SIZE, CELL_SIZE); // Draw obstacle square
                 } else {
                     g.setColor(Color.WHITE);
                     g.fillRect(x, y, CELL_SIZE, CELL_SIZE);

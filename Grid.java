@@ -32,4 +32,13 @@ public class Grid {
   public int getHeight() {
       return height;
   }
+
+  public void resetObstacles() {
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+            obstacles[i][j] = false;
+        }
+    }
+}
+
 }
