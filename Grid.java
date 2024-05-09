@@ -40,5 +40,12 @@ public class Grid {
         }
     }
 }
+public void setObstacle(int x, int y, boolean isObstacle) {
+  if (x >= 0 && x < width && y >= 0 && y < height) {
+      obstacles[x][y] = isObstacle;
+  } else {
+      System.out.println("Error: Coordinates out of bounds.");
+  }
+}
 
 }
