@@ -1,8 +1,8 @@
 import java.util.*;
 public class Grid {
-  private int width;  // Width of the grid
-  private int height; // Height of the grid
-  private boolean[][] obstacles;  // 2D boolean array representing obstacles
+  private final int width;  // Width of the grid
+  private final int height; // Height of the grid
+  private final boolean[][] obstacles;  // 2D boolean array representing obstacles
 
   public Grid(int width, int height) {
       this.width = width;
@@ -11,15 +11,11 @@ public class Grid {
   }
 
   public boolean isObstacle(int x, int y) {
-      if (x >= 0 && x < width && y >= 0 && y < height) { // Check if within grid bounds
-          return obstacles[x][y];
-      } else {
-          return false; // Can be adjusted to handle out-of-bounds behavior if needed
-      }
+      return x >= 0 && x < width && y >= 0 && y < height && obstacles[x][y];
   }
 
   public void generateRandomObstacles(int obstacleCount) {
-      Random random = new Random();
+      java.util.Random random = new java.util.Random();
 
       for (int i = 0; i < obstacleCount; i++) {
           int x = random.nextInt(width);
@@ -30,18 +26,10 @@ public class Grid {
   }
 
   public int getWidth() {
-    return width;
-  }
-
-  public void setWidth(int width) {
-    this.width = width;
+      return width;
   }
 
   public int getHeight() {
-    return height;
-  }
-
-  public void setHeight(int height) {
-    this.height = height;
+      return height;
   }
 }
