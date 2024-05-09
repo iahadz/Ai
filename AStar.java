@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 public class AStar {
     public static List<Node> aStar(Grid grid, Node start, Node goal) {
+        if (grid.isObstacle(goal.x, goal.y)) {
+            return null; // Goal is unreachable
+        }
+
         PriorityQueue<Node> openSet = new PriorityQueue<>((n1, n2) -> Double.compare(n1.f, n2.f));
         HashSet<Node> visited = new HashSet<>();
 
@@ -67,13 +71,13 @@ public class AStar {
     }
 
     private static double calculateDistance(Node current, Node neighbor) {
-        // Use Euclidean or Manhattan distance as appropriate
-        return Math.sqrt(Math.pow(current.x - neighbor.x, 2) + Math.pow(current.y - neighbor.y, 2)); 
+        // Use Manhattan distance for grid-based movement
+        return Math.abs(current.x - neighbor.x) + Math.abs(current.y - neighbor.y);
     }
 
     private static double calculateHeuristic(Node neighbor, Node goal) {
         // Use Manhattan distance for heuristic
-        return Math.abs(neighbor.x - goal.x) + Math.abs(neighbor.y - goal.y); 
+        return Math.abs(neighbor.x - goal.x) + Math.abs(neighbor.y - goal.y);
     }
 
     private static List<Node> reconstructPath(Node current) {
