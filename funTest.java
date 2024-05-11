@@ -1,10 +1,10 @@
 import java.util.List;
 
-public class PathPlanningTest {
+public class funTest {
 
     public static void main(String[] args) {
         // Define the grid size and obstacle percentage
-        int gridSize = 10;
+        int gridSize = 5;
         int obstaclePercentage = 20;
 
         // Create a grid with obstacles

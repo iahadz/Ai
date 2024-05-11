@@ -1,5 +1,3 @@
-
-
 import java.util.*;
 public class Grid {
   private final int width;  // Width of the grid
