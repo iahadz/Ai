@@ -29,14 +29,12 @@ public class AStar {
                 }
 
                 double tentativeG = current.g + calculateDistance(current, neighbor);
-
-                if (!openSet.contains(neighbor) || tentativeG < neighbor.g) {
-                    neighbor.g = tentativeG;
-                    neighbor.h = calculateHeuristic(neighbor, goal);
-                    neighbor.f = neighbor.g + neighbor.h;
-                    neighbor.parent = current;
-                    openSet.add(neighbor);
-                }
+                double h = calculateHeuristic(neighbor, goal); // Calculate heuristic for the neighbor
+                neighbor.g = tentativeG;
+                neighbor.h = h;
+                neighbor.f = tentativeG + h;
+                neighbor.parent = current;
+                openSet.add(neighbor);
             }
         }
 
@@ -58,7 +56,7 @@ public class AStar {
                 int newY = y + dy;
 
                 if (isValid(grid, newX, newY)) {
-                    successors.add(new Node(newX, newY, current));
+                    successors.add(new Node(newX, newY, current, 0, 0)); // Initialize with zero cost and heuristic
                 }
             }
         }

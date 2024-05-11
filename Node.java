@@ -8,10 +8,13 @@ public class Node {
     public double h;  // Heuristic estimate of the cost from this node to the goal
     public double f;  // Total cost estimate (g + h)
 
-    public Node(int x, int y, Node parent) {
+    public Node(int x, int y, Node parent, double g, double h) {
         this.x = x;
         this.y = y;
         this.parent = parent;
+        this.g = g;
+        this.h = h;
+        this.f = g + h;
     }
 
     @Override
@@ -27,4 +30,3 @@ public class Node {
         return Objects.hash(x, y);
     }
 }
-

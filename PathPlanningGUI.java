@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public class PathPlanningGUI extends JFrame {
-    private static final int GRID_SIZE = 10; // Size of the grid
+    private static final int GRID_SIZE = 30; // Size of the grid
     private static final int CELL_SIZE = 30; // Size of each cell in pixels
 
     private Grid grid;
@@ -20,8 +20,8 @@ public class PathPlanningGUI extends JFrame {
         setResizable(false);
 
         grid = generateRandomGrid(GRID_SIZE, 20); // Initial grid with 20% obstacles
-        startNode = new Node(0, 0, null);
-        goalNode = new Node(GRID_SIZE - 1, GRID_SIZE - 1, null);
+        startNode = new Node(0, 0, null, 0, 0);
+        goalNode = new Node(GRID_SIZE - 1, GRID_SIZE - 1, null, 0, 0);
 
         JPanel controlPanel = new JPanel();
         JButton startButton = new JButton("Start");
@@ -31,8 +31,8 @@ public class PathPlanningGUI extends JFrame {
                 // Generate new random grid with obstacles
                 grid = generateRandomGrid(GRID_SIZE, 20); // Adjust obstacle percentage as needed
                 // Reset start and goal nodes
-                startNode = new Node(0, 0, null);
-                goalNode = new Node(GRID_SIZE - 1, GRID_SIZE - 1, null);
+                startNode = new Node(0, 0, null, 0, 0);
+                goalNode = new Node(GRID_SIZE - 1, GRID_SIZE - 1, null, 0, 0);
                 // Find path
                 path = AStar.aStar(grid, startNode, goalNode);
                 repaint();
@@ -45,17 +45,16 @@ public class PathPlanningGUI extends JFrame {
         setVisible(true);
     }
 
-    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-    
+
         // Draw grid
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 int x = i * CELL_SIZE;
                 int y = j * CELL_SIZE;
-    
+
                 if (grid.isObstacle(i, j)) {
                     g.setColor(Color.BLACK);
                     g.fillRect(x, y, CELL_SIZE, CELL_SIZE); // Draw obstacle square
@@ -67,19 +66,19 @@ public class PathPlanningGUI extends JFrame {
                 }
             }
         }
-    
+
         // Draw start node
         g.setColor(Color.BLUE); // Set color to blue for start state
         int startX = startNode.x * CELL_SIZE + CELL_SIZE / 2;
         int startY = startNode.y * CELL_SIZE + CELL_SIZE / 2;
         g.fillOval(startX - 5, startY - 5, 10, 10);
-    
+
         // Draw goal node
         g.setColor(Color.GREEN); // Set color to green for goal state
         int goalX = goalNode.x * CELL_SIZE + CELL_SIZE / 2;
         int goalY = goalNode.y * CELL_SIZE + CELL_SIZE / 2;
         g.fillOval(goalX - 5, goalY - 5, 10, 10);
-    
+
         // Draw path
         if (path != null) {
             g.setColor(Color.BLUE);
@@ -90,8 +89,6 @@ public class PathPlanningGUI extends JFrame {
             }
         }
     }
-    
-    
 
     private Grid generateRandomGrid(int size, int obstaclePercentage) {
         Grid grid = new Grid(size, size);
@@ -110,11 +107,26 @@ public class PathPlanningGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new PathPlanningGUI();
-            }
-        });
-    }
-}
+      SwingUtilities.invokeLater(new Runnable() {
+          @Override
+          public void run() {
+              PathPlanningGUI gui = new PathPlanningGUI();
+  
+              // Create a 5x5 grid with obstacles
+              gui.grid = new Grid(5, 5);
+              gui.grid.setObstacle(1, 2, true);
+              gui.grid.setObstacle(2, 2, true);
+              gui.grid.setObstacle(3, 2, true);
+              gui.grid.setObstacle(3, 3, true);
+  
+              // Set start and goal nodes
+              gui.startNode = new Node(0, 0, null, 0, 0);
+              gui.goalNode = new Node(4, 4, null, 0, 0);
+  
+              // Find path
+              gui.path = AStar.aStar(gui.grid, gui.startNode, gui.goalNode);
+              gui.repaint();
+          }
+      });
+    }}
+  
