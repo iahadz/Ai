@@ -71,7 +71,7 @@ public class PathPlanningGUI extends JFrame {
         g.setColor(Color.BLUE); // Set color to blue for start state
         int startX = startNode.x * CELL_SIZE + CELL_SIZE / 2;
         int startY = startNode.y * CELL_SIZE + CELL_SIZE / 2;
-        g.fillOval(startX - 5, startY - 5, 10, 10);
+        g.fillOval(startX , startY, 10, 10);
 
         // Draw goal node
         g.setColor(Color.GREEN); // Set color to green for goal state
