@@ -95,7 +95,7 @@ public class AStar {
     private static double calculateHeuristic(Node node, Node goal) {
         int dx = Math.abs(node.x - goal.x);
         int dy = Math.abs(node.y - goal.y);
-        return Math.sqrt(dx * dx - dy * dy); 
+        return Math.sqrt(dx * dx + dy * dy); 
     }
 
     // Reconstruct the path from the goal node back to the start
@@ -112,7 +112,7 @@ public class AStar {
       public static void main(String[] args) {
           // 1. Create the Grid
           Grid grid = new Grid(10, 10); // 10x10 grid
-          grid.generateRandomObstacles(20); // Add 20 random obstacles
+          grid.generateRandomObstacles(50); // Add random obstacles
   
           // 2. Define Start and Goal Nodes
           Node start = new Node(0, 0, null, 0, 0);
