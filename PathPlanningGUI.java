@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 public class PathPlanningGUI extends JFrame {
-    private static final int GRID_SIZE = 30; // Size of the grid
-    private static final int CELL_SIZE = 30; // Size of each cell in pixels
+    private static final int GRID_SIZE = 5; // Size of the grid
+    private static final int CELL_SIZE = 50; // Size of each cell in pixels
 
     private Grid grid;
     private Node startNode;

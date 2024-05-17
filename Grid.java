@@ -49,3 +49,5 @@ public void setObstacle(int x, int y, boolean isObstacle) {
   }
 }
 }
+
+
