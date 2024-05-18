@@ -140,7 +140,7 @@ public class AStarGUI extends JFrame {
         fnValuesLabel.setText(sb.toString());
 
         // Update total f(n) label
-        totalFnLabel.setText("Total f(n): " + String.format("%.1f", totalPathCost));
+        totalFnLabel.setText("Path cost : " + String.format("%.1f", totalPathCost));
     }
 
     private boolean pathContainsNode(int x, int y) {
