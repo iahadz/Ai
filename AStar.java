@@ -130,12 +130,12 @@ public class AStar {
 
     public static void main(String[] args) {
       // 1. Create Grid with Obstacles
-      Grid grid = new Grid(10, 10);
-      grid.generateRandomObstacles(25); // 25% obstacle density
+      Grid grid = new Grid(15, 15);
+      grid.generateRandomObstacles(100); // 25% obstacle density
 
       // 2. Define Start and Goal
       Node start = new Node(0, 0, null, 0, 0);
-      Node goal = new Node(9, 9, null, 0, 0);
+      Node goal = new Node(14, 14, null, 0, 0);
       grid.setObstacle(start.x, start.y, false); // Ensure start isn't blocked
       grid.setObstacle(goal.x, goal.y, false);   // Ensure goal isn't blocked
 
