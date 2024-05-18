@@ -85,21 +85,40 @@ public class AStar {
     }
 
     // Calculate distance between two nodes (1 for horizontal/vertical, √2 for diagonal)
-    private static double calculateDistance(Node node1, Node node2) {
+    public static double calculateDistance(Node node1, Node node2) {
         int dx = Math.abs(node1.x - node2.x);
         int dy = Math.abs(node1.y - node2.y);
         return (dx == 1 && dy == 1) ? Math.sqrt(2) : 1;
     }
+    
+    public static double calculateDistance(Node node) {
+      double distance = 0.0;
+      Node current = node;
+  
+      while (current.parent != null) {
+          distance += calculateDistance(current, current.parent); // Use existing distance calculation for adjacent nodes
+          current = current.parent;
+      }
+  
+      return distance;
+  }
+  
 
     // Calculate Euclidean distance heuristic
-    private static double calculateHeuristic(Node node, Node goal) {
+    public static double calculateHeuristic(Node node, Node goal) {
         int dx = Math.abs(node.x - goal.x);
         int dy = Math.abs(node.y - goal.y);
         return Math.sqrt(dx * dx + dy * dy); 
     }
 
+    public static double calculateFCost(Node node, Node goal) {
+      double gCost = calculateDistance(node);
+      double hCost = calculateHeuristic(node, goal);
+      return gCost + hCost;
+  }
+
     // Reconstruct the path from the goal node back to the start
-    private static List<Node> reconstructPath(Node current) {
+    public static List<Node> reconstructPath(Node current) {
         List<Node> path = new ArrayList<>();
         while (current != null) {
             path.add(0, current); // Add nodes in reverse order to get path from start to goal
@@ -109,50 +128,57 @@ public class AStar {
     }
     
 
-      public static void main(String[] args) {
-          // 1. Create the Grid
-          Grid grid = new Grid(10, 10); // 10x10 grid
-          grid.generateRandomObstacles(50); // Add random obstacles
-  
-          // 2. Define Start and Goal Nodes
-          Node start = new Node(0, 0, null, 0, 0);
-          Node goal = new Node(9, 9, null, 0, 0);
-  
-          // Ensure start and goal are not on obstacles
-          grid.setObstacle(start.x, start.y, false);
-          grid.setObstacle(goal.x, goal.y, false);
-  
-          // 3. Run A* Search
-          List<Node> path = AStar.aStar(grid, start, goal);
-  
-          // 4. Print Results
-          printGrid(grid, path);
-      }
-  
-      // Function to print the grid and path (if found)
-      private static void printGrid(Grid grid, List<Node> path) {
-          for (int y = 0; y < grid.getHeight(); y++) {
-              for (int x = 0; x < grid.getWidth(); x++) {
-                  if (grid.isObstacle(x, y)) {
-                      System.out.print("O "); // Obstacle
-                  } else if (path != null && path.contains(new Node(x, y, null, 0, 0))) {
-                      System.out.print("X "); // Path node
-                  } else {
-                      System.out.print("- "); // Empty space
-                  }
-              }
-              System.out.println();
-          }
-          if (path != null) {
-            System.out.println("Path found! Length: " + path.size());
-            System.out.println("F(n) values along the path:");
+    public static void main(String[] args) {
+      // 1. Create Grid with Obstacles
+      Grid grid = new Grid(10, 10);
+      grid.generateRandomObstacles(25); // 25% obstacle density
 
-            // Calculate and print F(n) for each node in the path
-            for (Node node : path) {
-                double fn = node.f;
-                System.out.println("Node (" + node.x + ", " + node.y + "): F(n) = " + fn);
-            }
-        } else {
-            System.out.println("No path found.");
-        }}
+      // 2. Define Start and Goal
+      Node start = new Node(0, 0, null, 0, 0);
+      Node goal = new Node(9, 9, null, 0, 0);
+      grid.setObstacle(start.x, start.y, false); // Ensure start isn't blocked
+      grid.setObstacle(goal.x, goal.y, false);   // Ensure goal isn't blocked
+
+      // 3. Perform A* Search
+      List<Node> path = AStar.aStar(grid, start, goal);
+
+      // 4. Visualize Results
+      printGridWithPath(grid, path, start, goal);
+
+      // 5. Print F(n) Values (optional)
+      if (path != null) {
+          System.out.println("\nF(n) values along the path:");
+          for (Node node : path) {
+              double fn = AStar.calculateFCost(node, goal);
+              System.out.println("Node (" + node.x + ", " + node.y + "): F(n) = " + fn);
+          }
+      }
+      if (path != null) {
+        double totalPathCost = calculateDistance(path.get(path.size() - 1));
+        System.out.println("\nFull Path Cost: " + totalPathCost);
+    } else {
+        System.out.println("\nNo path found.");
+    }
   }
+
+  // Helper function to print the grid with path and start/goal marked
+  private static void printGridWithPath(Grid grid, List<Node> path, Node start, Node goal) {
+      for (int y = 0; y < grid.getHeight(); y++) {
+          for (int x = 0; x < grid.getWidth(); x++) {
+              if (grid.isObstacle(x, y)) {
+                  System.out.print("O "); // Obstacle
+              } else if (x == start.x && y == start.y) {
+                  System.out.print("S "); // Start
+              } else if (x == goal.x && y == goal.y) {
+                  System.out.print("G "); // Goal
+              } else if (path != null && path.contains(new Node(x, y, null, 0, 0))) {
+                  System.out.print("X "); // Path
+              } else {
+                  System.out.print("- "); // Empty
+              }
+          }
+          System.out.println();
+      }
+  }
+}
+
