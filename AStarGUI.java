@@ -82,7 +82,7 @@ public class AStarGUI extends JFrame {
 
     private void startAStar() {
         path = AStar.aStar(grid, start, goal);
-        totalPathCost = path != null ? AStar.calculateDistance(path.get(path.size() - 2)) : 0;
+        totalPathCost = path != null ? AStar.calculateDistance(path.get(path.size() -1)) : 0;
     }
 
     private void drawGrid(Graphics g) {
@@ -128,7 +128,7 @@ public class AStarGUI extends JFrame {
         StringBuilder sb = new StringBuilder("f(n) values: ");
         if (path != null) {
             for (Node node : path) {
-                if (!(node.x == start.x && node.y == start.y) && !(node.x == goal.x && node.y == goal.y)) {
+                if (!(node.x == start.x && node.y == start.y) ) {
                   double a = AStar.calculateDistance(node);
                   double b = AStar.calculateHeuristic(node, goal);
                     double fn = AStar.calculateFCost(node, goal);
