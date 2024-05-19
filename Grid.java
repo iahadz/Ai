@@ -24,7 +24,30 @@ public class Grid {
           obstacles[x][y] = true; // Mark the cell as an obstacle
       }
   }
+  public List<Node> getNeighbors(Node node) {
+    List<Node> neighbors = new ArrayList<>();
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            // Skip the current node itself
+            if (dx == 0 && dy == 0) {
+                continue;
+            }
 
+            int newX = node.x + dx;
+            int newY = node.y + dy;
+
+            // Check if the new coordinates are within the grid bounds and not an obstacle
+            if (isValid(newX, newY)) {
+                neighbors.add(new Node(newX, newY));
+            }
+        }
+    }
+    return neighbors;
+}
+
+private boolean isValid(int x, int y) {
+  return x >= 0 && x < width && y >= 0 && y < height && !obstacles[x][y];
+}
   public int getWidth() {
       return width;
   }

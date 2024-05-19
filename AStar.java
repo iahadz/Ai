@@ -2,61 +2,65 @@ import java.util.*;
 
 public class AStar {
 
-    public static List<Node> aStar(Grid grid, Node start, Node goal) {
-        // Check if goal is reachable
-        if (grid.isObstacle(goal.x, goal.y)) {
-            return null; // Goal is unreachable
-        }
-
-        // Priority queue for open set, sorted by f-cost
-        PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingDouble(node -> node.f));
-        // Hash set for closed set (visited nodes)
-        Set<Node> closedSet = new HashSet<>();
-
-        // Add the start node to the open set
-        openSet.add(start);
-
-        // Main A* search loop
-        while (!openSet.isEmpty()) {
-            // Get the node with the lowest f-cost from the open set
-            Node current = openSet.poll();
-
-            // Goal reached, reconstruct the path
-            if (current.equals(goal)) {
-                return reconstructPath(current);
-            }
-
-            // Move current node to closed set
-            closedSet.add(current);
-
-            // Explore neighbors
-            for (Node neighbor : getNeighbors(grid, current)) {
-                // Skip if already visited
-                if (closedSet.contains(neighbor)) {
-                    continue;
-                }
-
-                // Calculate tentative g-cost through the current node
-                double tentativeG = current.g + calculateDistance(current, neighbor);
-
-                // Check if the neighbor is in the open set or has a lower g-cost than before
-                if (!openSet.contains(neighbor) || tentativeG < neighbor.g) {
-                    neighbor.parent = current;
-                    neighbor.g = tentativeG;
-                    neighbor.h = calculateHeuristic(neighbor, goal);
-                    neighbor.f = neighbor.g + neighbor.h;
-
-                    // Add the neighbor to the open set if it's not already there
-                    if (!openSet.contains(neighbor)) {
-                        openSet.add(neighbor);
-                    }
-                }
-            }
-        }
-
-        // No path found
-        return null; 
+  public static List<Node> aStar(Grid grid, Node start, Node goal) {
+    // Check if goal is reachable
+    if (grid.isObstacle(goal.x, goal.y)) {
+        return null; // Goal is unreachable
     }
+
+    // Fringe (Priority Queue) for unexpanded nodes, sorted by f-cost
+    PriorityQueue<Node> fringe = new PriorityQueue<>(Comparator.comparingDouble(node -> node.f));
+    // Hash set for closed set (visited nodes)
+    Set<Node> closedSet = new HashSet<>();
+
+    // Add the start node to the fringe
+    start.g = 0; 
+    start.h = calculateHeuristic(start, goal);
+    start.f = start.g + start.h;
+    fringe.add(start);
+
+    // Main A* search loop
+    while (!fringe.isEmpty()) {
+        // Get the node with the lowest f-cost from the fringe
+        Node current = fringe.poll();
+
+        // Goal reached, reconstruct the path
+        if (current.equals(goal)) {
+            return reconstructPath(current);
+        }
+
+        // Move current node to closed set
+        closedSet.add(current);
+
+        // Explore neighbors
+        for (Node neighbor : getNeighbors(grid, current)) {
+            // Skip if already visited or an obstacle
+            if (closedSet.contains(neighbor) || grid.isObstacle(neighbor.x, neighbor.y)) {
+                continue;
+            }
+
+            // Calculate tentative g-cost through the current node
+            double tentativeG = current.g + calculateDistance(current, neighbor);
+
+            // Check if the neighbor is in the fringe or has a lower g-cost than before
+            if (!fringe.contains(neighbor) || tentativeG < neighbor.g) {
+                neighbor.parent = current;
+                neighbor.g = tentativeG;
+                neighbor.h = calculateHeuristic(neighbor, goal);
+                neighbor.f = neighbor.g + neighbor.h;
+
+                // Add the neighbor to the fringe if it's not already there
+                if (!fringe.contains(neighbor)) {
+                    fringe.add(neighbor);
+                }
+            }
+        }
+    }
+
+    // No path found
+    return null; 
+}
+
 
     // Get valid neighbors of a node
     private static List<Node> getNeighbors(Grid grid, Node current) {
@@ -134,8 +138,8 @@ public class AStar {
       grid.generateRandomObstacles(25); // 25% obstacle density
 
       // 2. Define Start and Goal
-      Node start = new Node(0, 0, null, 0, 0);
-      Node goal = new Node(9, 9, null, 0, 0);
+      Node start = new Node(0, 0,null,0,0);
+      Node goal = new Node(9, 9,null,0,0);
       grid.setObstacle(start.x, start.y, false); // Ensure start isn't blocked
       grid.setObstacle(goal.x, goal.y, false);   // Ensure goal isn't blocked
 
@@ -145,45 +149,68 @@ public class AStar {
       // 4. Visualize Results
       printGridWithPath(grid, path, start, goal);
 
-      // 5. Print F(n) Values (optional)
+      // 5. Print F(n) Values & Unexpanded Nodes
       if (path != null) {
           System.out.println("\nF(n) values along the path:");
           for (Node node : path) {
               double fn = AStar.calculateFCost(node, goal);
               double a = AStar.calculateDistance(node);
-              double b = AStar.calculateHeuristic(node,goal);
-              //System.out.println("Node (" + node.x + ", " + node.y + "): ("+a+"+"+b+"="+fn);
-              System.out.printf("Node (%d , %d): %.1f + %.1f = %.1f \n",node.x, node.y ,a,b,fn);
-
-
+              double b = AStar.calculateHeuristic(node, goal);
+              System.out.printf("Node (%d, %d): %.1f + %.1f = %.1f\n", node.x, node.y, a, b, fn);
           }
-      }
-      if (path != null) {
-        double totalPathCost = calculateDistance(path.get(path.size() - 1));
-        System.out.println("\nFull Path Cost: " + totalPathCost);
-    } else {
-        System.out.println("\nNo path found.");
-    }
-  }
+           if (path != null) {
+               double totalPathCost = calculateDistance(path.get(path.size() - 1));
+                 System.out.println("\nFull Path Cost: " + totalPathCost);
+                  } else {
+                   System.out.println("\nNo path found.");
+                 }
 
-  // Helper function to print the grid with path and start/goal marked
-  private static void printGridWithPath(Grid grid, List<Node> path, Node start, Node goal) {
-      for (int y = 0; y < grid.getHeight(); y++) {
-          for (int x = 0; x < grid.getWidth(); x++) {
-              if (grid.isObstacle(x, y)) {
-                  System.out.print("O "); // Obstacle
-              } else if (x == start.x && y == start.y) {
-                  System.out.print("S "); // Start
-              } else if (x == goal.x && y == goal.y) {
-                  System.out.print("G "); // Goal
-              } else if (path != null && path.contains(new Node(x, y, null, 0, 0))) {
-                  System.out.print("X "); // Path
-              } else {
-                  System.out.print("- "); // Empty
+          // Print unexpanded nodes
+          PriorityQueue<Node> remainingFringe = getUnexpandedNodes(grid, path, start);
+          if (!remainingFringe.isEmpty()) {
+              System.out.println("\nUnexpanded nodes (in no particular order):");
+              while (!remainingFringe.isEmpty()) {
+                  Node unexpandedNode = remainingFringe.poll();
+                  System.out.printf("Node (%d, %d)\n", unexpandedNode.x, unexpandedNode.y);
               }
           }
-          System.out.println();
+          
       }
   }
-}
+ 
+  // Helper function to print the grid (unchanged)
+  // Helper function to print the grid with path and start/goal marked
+private static void printGridWithPath(Grid grid, List<Node> path, Node start, Node goal) {
+        for (int y = 0; y < grid.getHeight(); y++) {
+            for (int x = 0; x < grid.getWidth(); x++) {
+              if (grid.isObstacle(x, y)) {
+               System.out.print("O "); // Obstacle
+              } else if (x == start.x && y == start.y) {
+               System.out.print("S "); // Start
+              } else if (x == goal.x && y == goal.y) {
+               System.out.print("G "); // Goal
+              } else if (path != null && path.contains(new Node(x, y, null, 0, 0))) {
+              System.out.print("X "); // Path
+             } else {
+             System.out.print("- "); // Empty
+              }
+              }
+          System.out.println();
+            }
+         }
+  // Helper function to get unexpanded nodes (now a static method within the AStar class)
+  private static PriorityQueue<Node> getUnexpandedNodes(Grid grid, List<Node> path, Node start) {
+      PriorityQueue<Node> fringe = new PriorityQueue<>(Comparator.comparingDouble(node -> node.f));
+      Set<Node> expandedNodes = new HashSet<>(path);
+      expandedNodes.add(start);
 
+      for (Node node : path) {
+          for (Node neighbor : grid.getNeighbors(node)) { // Use grid.getNeighbors here
+              if (!expandedNodes.contains(neighbor)) {
+                  fringe.add(neighbor);
+              }
+          }
+      }
+      return fringe;
+  }
+}

@@ -17,6 +17,12 @@ public class Node {
         this.f = g + h;
     }
 
+
+    // Constructor with only x and y coordinates
+    public Node(int x, int y) {
+      this.x = x;
+      this.y = y;
+  }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
