@@ -171,7 +171,7 @@ public class AStar {
               System.out.println("\nUnexpanded nodes (in no particular order):");
               while (!remainingFringe.isEmpty()) {
                   Node unexpandedNode = remainingFringe.poll();
-                  System.out.printf("Node (%d, %d)\n", unexpandedNode.x, unexpandedNode.y);
+                  System.out.printf("Node (%d, %d) ,", unexpandedNode.x, unexpandedNode.y);
               }
           }
           
