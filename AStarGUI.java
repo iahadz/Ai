@@ -72,7 +72,7 @@ public class AStarGUI extends JFrame {
 
     private void resetGrid() {
         grid = new Grid(GRID_SIZE, GRID_SIZE);
-        grid.generateRandomObstacles(925); // % obstacle density
+        grid.generateRandomObstacles(25); // % obstacle density
 
         start = new Node(0, 0, null, 0, 0);
         goal = new Node(GRID_SIZE - 1, GRID_SIZE - 1, null, 0, 0);
@@ -132,8 +132,7 @@ public class AStarGUI extends JFrame {
                   double a = AStar.calculateDistance(node);
                   double b = AStar.calculateHeuristic(node, goal);
                     double fn = AStar.calculateFCost(node, goal);
-                    //sb.append("(").append(node.x).append(",").append(node.y).append("): ").append(String.format("%.1f", fn)).append("   ");
-                    sb.append("(").append(node.x).append(",").append(node.y).append("): ").append("=(").append(String.format("%.1f",a)).append("+").append(String.format("%.1f",b)).append(")= ").append(String.format("%.1f ", fn)).append(", ");
+                                    sb.append("(").append(node.x).append(",").append(node.y).append("): ").append("=(").append(String.format("%.1f",a)).append("+").append(String.format("%.1f",b)).append(")= ").append(String.format("%.1f ", fn)).append(", ");
                 }
             }
         }
