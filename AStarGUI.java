@@ -72,7 +72,7 @@ public class AStarGUI extends JFrame {
 
     private void resetGrid() {
         grid = new Grid(GRID_SIZE, GRID_SIZE);
-        grid.generateRandomObstacles(25); // 25% obstacle density
+        grid.generateRandomObstacles(925); // % obstacle density
 
         start = new Node(0, 0, null, 0, 0);
         goal = new Node(GRID_SIZE - 1, GRID_SIZE - 1, null, 0, 0);

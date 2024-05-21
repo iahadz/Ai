@@ -106,15 +106,20 @@ public class AStar {
   
       return distance;
   }
-  
+  //Calculate Octile Distance heuristic
 
     // Calculate Euclidean distance heuristic
-    public static double calculateHeuristic(Node node, Node goal) {
-        int dx = Math.abs(node.x - goal.x);
-        int dy = Math.abs(node.y - goal.y);
-        return Math.sqrt(dx * dx + dy * dy); 
-    }
-
+    // public static double calculateHeuristic(Node node, Node goal) {
+    //     int dx = Math.abs(node.x - goal.x);
+    //     int dy = Math.abs(node.y - goal.y);
+    //     return Math.sqrt(dx * dx + dy * dy); 
+    // }
+      //Calculate Octile Distance heuristic
+    public static double calculateHeuristic(Node node,  Node goal) {
+      int dx = Math.abs(goal.x - node.x);
+      int dy = Math.abs(goal.y - node.y);
+      return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
+  }
     public static double calculateFCost(Node node, Node goal) {
       double gCost = calculateDistance(node);
       double hCost = calculateHeuristic(node, goal);
