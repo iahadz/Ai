@@ -106,7 +106,6 @@ public class AStar {
   
       return distance;
   }
-  //Calculate Octile Distance heuristic
 
     // Calculate Euclidean distance heuristic
     // public static double calculateHeuristic(Node node, Node goal) {
@@ -138,23 +137,23 @@ public class AStar {
     
 
     public static void main(String[] args) {
-      // 1. Create Grid with Obstacles
+      // Create Grid with Obstacles
       Grid grid = new Grid(10, 10);
-      grid.generateRandomObstacles(25); // 25% obstacle density
+      grid.generateRandomObstacles(25); // % obstacle density
 
-      // 2. Define Start and Goal
+      //  Define Start and Goal
       Node start = new Node(0, 0,null,0,0);
       Node goal = new Node(9, 9,null,0,0);
       grid.setObstacle(start.x, start.y, false); // Ensure start isn't blocked
       grid.setObstacle(goal.x, goal.y, false);   // Ensure goal isn't blocked
 
-      // 3. Perform A* Search
+      //  Perform A* Search
       List<Node> path = AStar.aStar(grid, start, goal);
 
-      // 4. Visualize Results
+      //  Visualize Results
       printGridWithPath(grid, path, start, goal);
 
-      // 5. Print F(n) Values & Unexpanded Nodes
+      //  Print F(n) Values & Unexpanded Nodes
       if (path != null) {
           System.out.println("\nF(n) values along the path:");
           for (Node node : path) {
@@ -183,8 +182,8 @@ public class AStar {
       }
   }
  
-  // Helper function to print the grid (unchanged)
-  // Helper function to print the grid with path and start/goal marked
+  
+  // function to print the grid with path and start/goal marked
 private static void printGridWithPath(Grid grid, List<Node> path, Node start, Node goal) {
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
@@ -203,7 +202,7 @@ private static void printGridWithPath(Grid grid, List<Node> path, Node start, No
           System.out.println();
             }
          }
-  // Helper function to get unexpanded nodes (now a static method within the AStar class)
+  //function to get unexpanded nodes 
   private static PriorityQueue<Node> getUnexpandedNodes(Grid grid, List<Node> path, Node start) {
       PriorityQueue<Node> fringe = new PriorityQueue<>(Comparator.comparingDouble(node -> node.f));
       Set<Node> expandedNodes = new HashSet<>(path);
